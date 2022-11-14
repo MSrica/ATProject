@@ -4,18 +4,37 @@
 #include <ESP8266WiFi.h>
 #include <ESPAsyncWebServer.h>
 
+#define echoPinOne 5
+#define trigPinOne 4
+
+#define echoPinTwo 0
+#define trigPinTwo 2
+
 const char *SERVER_SSID = "ESP8266-Access-Point";
 const char *SERVER_PASSWORD = "123456789";
 
 const long BAUD = 115200;
 
+int distanceForward = 0;
+int distanceBackward = 0;
+
 AsyncWebServer server(80);
 
 String moveForward(){
+  if (distanceForward < 25){
+    Serial.println("Too close to an obstacle, move backward");
+    return "stay";
+  }
+
   Serial.println("Moving forward 10 cm");
   return "forward";
 }
 String moveBackward(){
+  if (distanceForward < 25){
+    Serial.println("Too close to an obstacle, move forward");
+    return "stay";
+  }
+
   Serial.println("Moving backward 10 cm");
   return "backward";
 }
@@ -43,11 +62,21 @@ void setupServerRequests(){
   });
 }
 
-void setup(){
-  Serial.println();
+void setupUltrasonicPins(){
+  pinMode(trigPinOne, OUTPUT);
+  pinMode(echoPinOne, INPUT);
 
+  pinMode(trigPinTwo, OUTPUT);
+  pinMode(echoPinTwo, INPUT);
+}
+
+void setup(){
   Serial.begin(BAUD);
+  Serial.println();
   Serial.println("Serial debug set up");
+
+  setupUltrasonicPins();
+  Serial.println("Ultrasonic pins set up");
   
   WiFi.softAP(SERVER_SSID, SERVER_PASSWORD);
   Serial.println("Access point set up");
@@ -61,5 +90,19 @@ void setup(){
   server.begin();
   Serial.print("Server started");
 }
- 
-void loop(){}
+
+int getSensorDistance(int trigPin, int echoPin){
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  return int(pulseIn(echoPin, HIGH) * 0.034 / 2);
+}
+
+void loop() {
+  distanceForward = getSensorDistance(trigPinOne, echoPinOne);  
+  distanceBackward = getSensorDistance(trigPinTwo, echoPinTwo);
+}
