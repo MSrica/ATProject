@@ -1,12 +1,19 @@
+// motor code, pinout: https://create.arduino.cc/projecthub/Techatronic/dc-motor-speed-control-using-arduino-0e5b2b
+// ultrasonic code, pinout: https://www.instructables.com/id/Arduino-Ultrasonic-Sensor-HC-SR04/
+// nrf24l01 code, pinout: https://howtomechatronics.com/tutorials/arduino/arduino-wireless-communication-nrf24l01-tutorial/
+// led code, pinout: https://howtomechatronics.com/tutorials/arduino/how-to-control-ws2812b-individually-addressable-leds-using-arduino/
+// buzzer code, pinout: https://create.arduino.cc/projecthub/munir03125344286/add-buzzer-to-arduino-bf010b
+
 #include <SPI.h>
 #include <RF24.h>
 #include <nRF24L01.h>
 
-#define echoPinOne 16
-#define trigPinOne 15
+                      // WE, UNO
+#define echoPinOne D0 // D0, D10
+#define trigPinOne D8 // D8, D11
 
-#define echoPinTwo 0
-#define trigPinTwo 2
+#define echoPinTwo D3 // D3, D12
+#define trigPinTwo D4 // D4, D13
 
 const long SERIAL_BAUD = 115200;
 const byte RADIO_ADDRESS[6] = "00001";

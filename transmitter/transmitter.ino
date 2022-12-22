@@ -1,3 +1,6 @@
+// nrf24l01 code, pinout: https://howtomechatronics.com/tutorials/arduino/arduino-wireless-communication-nrf24l01-tutorial/
+// button code, pinout: https://arduinogetstarted.com/tutorials/arduino-button-library
+
 #include <SPI.h>
 #include <RF24.h>
 #include <nRF24L01.h>
